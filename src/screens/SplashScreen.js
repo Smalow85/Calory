@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Animated, { useSharedValue, withTiming, useAnimatedStyle } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
 
-export default function SplashScreen ( { navigation }) {
+export default function SplashScreen ( { navigation } ) {
   const opacity = useSharedValue(0);
 
   const letterAnimations = Array.from({ length: 8 }).map(() => ({

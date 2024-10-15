@@ -6,9 +6,9 @@ import { firestore } from '../config/FirebaseConfig';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { BASE_COLOR } from './Constants';
 
-const Settings = ({ navigation }) => {
+const Settings = ({ navigation, currentGoal }) => {
   const [isEnabled, setIsEnabled] = useState(false);
-  const [caloriesBudget, setCaloriesBudget] = useState(''); // State for calorie budget
+  const [caloriesBudget, setCaloriesBudget] = useState(currentGoal); // State for calorie budget
   const route = useRoute(); // Hook to access route parameters
   const { userId } = route.params; // Extract userId from route params
 
@@ -36,6 +36,7 @@ const Settings = ({ navigation }) => {
           });
 
           Alert.alert('Success', `Calories budget of ${caloriesBudget} saved!`);
+          navigation.navigate('HomeScreen')
         } else {
           Alert.alert('Error', 'User not found');
         }
@@ -71,7 +72,7 @@ const Settings = ({ navigation }) => {
         <Text style={styles.settingText}>Calories Budget</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your calorie budget"
+          placeholder={currentGoal}
           keyboardType="numeric"
           value={caloriesBudget}
           onChangeText={setCaloriesBudget}

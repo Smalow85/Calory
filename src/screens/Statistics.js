@@ -1,100 +1,134 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, Dimensions, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import NutrientsStats from '../components/NutrientsStats';
 import WeeklyReportChart from '../components/Graph';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
-import { firestore } from '../config/FirebaseConfig'; // Adjust the import based on your project structure
+import { firestore } from '../config/FirebaseConfig';
 import { useRoute } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons'; // Icon library
+import { Ionicons } from '@expo/vector-icons';
 
 const screenWidth = Dimensions.get('window').width;
 
-const Statistics = ( { navigation }) => {
+const Statistics = ({ navigation }) => {
   const [weeklyData, setWeeklyData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [mealsByDay, setMealsByDay] = useState({});
+  const [currentWeekStart, setCurrentWeekStart] = useState(getMonday(new Date()));
   const route = useRoute();
   const { userId } = route.params;
 
   useEffect(() => {
-    fetchLastWeekData();
-  }, []);
+    fetchWeekData(currentWeekStart);
+  }, [currentWeekStart]);
 
-  const fetchLastWeekData = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  function getMonday(d) {
+    d = new Date(d);
+    var day = d.getDay(),
+        diff = d.getDate() - day + (day == 0 ? -6:1); // adjust when day is sunday
+    return new Date(d.setDate(diff));
+  }
 
-        const today = new Date();
-        const lastWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const fetchWeekData = async (startDate) => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const startTimestamp = Timestamp.fromDate(lastWeek);
-        const endTimestamp = Timestamp.fromDate(today);
+      const endDate = new Date(startDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+      const startTimestamp = Timestamp.fromDate(startDate);
+      const endTimestamp = Timestamp.fromDate(endDate);
 
-        const mealsRef = collection(firestore, 'meals');
-        const q = query(
-          mealsRef,
-          where('timestamp', '>=', startTimestamp),
-          where('timestamp', '<=', endTimestamp),
-          where('user_id', '==', userId)
-        );
+      const mealsRef = collection(firestore, 'meals');
+      const q = query(
+        mealsRef,
+        where('timestamp', '>=', startTimestamp),
+        where('timestamp', '<', endTimestamp),
+        where('user_id', '==', userId)
+      );
 
-        const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(q);
 
-        // Create an object to store meals by date
-        const mealsByDate = {};
+      const mealsData = {};
+      const dailyTotals = {
+        'Mon': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Tue': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Wed': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Thu': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Fri': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Sat': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+        'Sun': { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0 },
+      };
 
-        querySnapshot.forEach(doc => {
-          const mealData = doc.data();
-          const date = mealData.timestamp.toDate();
-          const dayKey = date.toISOString().split('T')[0]; // Use YYYY-MM-DD as key
+      querySnapshot.forEach(doc => {
+        const mealData = doc.data();
+        const date = mealData.timestamp.toDate();
+        const dayKey = date.toLocaleString('en-US', { weekday: 'short' });
 
-          if (!mealsByDate[dayKey]) {
-            mealsByDate[dayKey] = {
-              dayName: date.toLocaleString('en-US', { weekday: 'short' }),
-              totalCalories: 0,
-              meals: []
-            };
-          }
+        if (!mealsData[dayKey]) {
+          mealsData[dayKey] = [];
+        }
 
-          mealsByDate[dayKey].meals.push(mealData);
-          mealsByDate[dayKey].totalCalories += mealData.calories || 0;
-        });
+        mealsData[dayKey].push(mealData);
 
-        // Initialize daily totals with 0 for all days
-        const dailyTotals = {
-          'Mon': 0,
-          'Tue': 0,
-          'Wed': 0,
-          'Thu': 0,
-          'Fri': 0,
-          'Sat': 0,
-          'Sun': 0
-        };
+        dailyTotals[dayKey].totalCalories += mealData.calories || 0;
+        dailyTotals[dayKey].fats += mealData.fats || 0;
+        dailyTotals[dayKey].proteins += mealData.proteins || 0;
+        dailyTotals[dayKey].carbohydrates += mealData.carbohydrates || 0;
+      });
 
-        // Sum up calories for each day
-        Object.values(mealsByDate).forEach(dayData => {
-          dailyTotals[dayData.dayName] = dayData.totalCalories;
-        });
+      const daysOrder = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const chartData = daysOrder.map(day => ({
+        day,
+        value: Math.round(dailyTotals[day].totalCalories || 0),
+        fats: Math.round(dailyTotals[day].fats || 0),
+        proteins: Math.round(dailyTotals[day].proteins || 0),
+        carbohydrates: Math.round(dailyTotals[day].carbohydrates || 0),
+      }));
 
-        // Convert to the format needed for the chart
-        const daysOrder = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        const chartData = daysOrder.map(day => ({
-          day,
-          value: Math.round(dailyTotals[day] || 0)
-        }));
+      setWeeklyData(chartData);
+      setMealsByDay(mealsData);
 
-        setWeeklyData(chartData);
+      // Set the current day as the default selected day
+      const today = new Date().toLocaleString('en-US', { weekday: 'short' });
+      setSelectedDay(today);
 
-        // For debugging
-        console.log('Meals by date:', mealsByDate);
-        console.log('Chart data:', chartData);
+    } catch (error) {
+      console.error("Error fetching meal data:", error);
+      setError("Failed to fetch meal data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      } catch (error) {
-        console.error("Error fetching meal data:", error);
-        setError("Failed to fetch meal data");
-      } finally {
-        setLoading(false);
-      }
+  const handleBarClick = (day) => {
+    setSelectedDay(day);
+  };
+
+  const getSelectedDayData = () => {
+    if (!weeklyData || !selectedDay) return { totalCalories: 0, fats: 0, proteins: 0, carbohydrates: 0, meals: [] };
+
+    const dayData = weeklyData.find(item => item.day === selectedDay);
+
+    return {
+      totalCalories: dayData ? dayData.value : 0,
+      fats: dayData ? dayData.fats : 0,
+      proteins: dayData ? dayData.proteins : 0,
+      carbohydrates: dayData ? dayData.carbohydrates : 0,
+      meals: mealsByDay[selectedDay] || [],
+    };
+  };
+
+  const navigateWeek = (direction) => {
+    const newDate = new Date(currentWeekStart);
+    newDate.setDate(newDate.getDate() + (direction * 7));
+    setCurrentWeekStart(getMonday(newDate));
+  };
+
+  const formatWeekRange = (startDate) => {
+    const endDate = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000);
+    const options = { month: 'short', day: 'numeric' };
+    return `${startDate.toLocaleDateString('en-US', options)} - ${endDate.toLocaleDateString('en-US', options)}`;
   };
 
   if (loading) {
@@ -113,20 +147,33 @@ const Statistics = ( { navigation }) => {
     );
   }
 
+  const { totalCalories, fats, proteins, carbohydrates, meals } = getSelectedDayData();
+
   return (
-  <SafeAreaView style={styles.container}>
-        <View style={styles.contentContainer}>
-            <View style={styles.headerRow}>
-                    <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-                      <Ionicons name="arrow-back" size={24} color="black" />
-                    </TouchableOpacity>
-                    <Text style={styles.headerText}>Settings</Text>
-            </View>
-            <View style={styles.calorieCard}>
-              <WeeklyReportChart style={styles.graph} data={weeklyData} />
-            </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.contentContainer}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Statistics</Text>
         </View>
-  </SafeAreaView>
+        <View style={styles.weekNavigator}>
+          <TouchableOpacity onPress={() => navigateWeek(-1)}>
+            <Ionicons name="chevron-back" size={24} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.weekText}>{formatWeekRange(currentWeekStart)}</Text>
+          <TouchableOpacity onPress={() => navigateWeek(1)}>
+            <Ionicons name="chevron-forward" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.calorieCard}>
+          <WeeklyReportChart style={styles.graph} data={weeklyData} onBarClick={handleBarClick} selectedDay={selectedDay} />
+        </View>
+
+        <NutrientsStats fats={fats} proteins={proteins} carbohydrates={carbohydrates} />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -140,12 +187,12 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     padding: 16,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 15,
   },
   backButton: {
     marginRight: 10,
@@ -154,6 +201,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: 'black',
+  },
+  weekNavigator: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  weekText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   calorieCard: {
     backgroundColor: '#ddd',
@@ -166,5 +223,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     padding: 16,
-  }
+  },
 });

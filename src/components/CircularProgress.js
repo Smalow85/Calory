@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
 import Animated, {
   useSharedValue,
@@ -10,9 +10,9 @@ import Animated, {
 import { PROGRESS_RING_COLOR } from '../screens/Constants'
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const { width } = Dimensions.get('window');
 
-export default function CircularProgress ({ currentValue, maxValue }) {
-  const radius = 90;
+export default function CircularProgress ({ currentValue, maxValue, radius }) {
   const strokeWidth = 15;
   const circumference = 2 * Math.PI * radius;
   const progress = useSharedValue(0);

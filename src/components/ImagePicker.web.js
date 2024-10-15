@@ -6,7 +6,6 @@ const ImagePickerComponent = (user_id) => {
 
   const openGallery = () => {
         document.getElementById('fileInput').click();
-
   };
 
   const handleFileChange = (event) => {

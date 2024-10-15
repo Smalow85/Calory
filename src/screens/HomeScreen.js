@@ -8,12 +8,13 @@ import {
   Dimensions,
   ScrollView
 } from 'react-native';
-import CircularProgress from '../components/CircularRing';
+import CircularProgress from '../components/CircularProgress';
 import { BASE_COLOR } from './Constants';
 import { config } from '../../config';
-import ImagePickerComponent from '../components/ImagePicker';
 import { fetchOrCreateUserByTelegramId } from '../service/UserCreationService';
 import { getMealsForToday, listenForMealUpdates } from '../service/MealDataService';
+import { analyzeMealImage } from '../service/OpenAIVisionService';
+import MealCard from '../components/MealCard'
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -25,6 +26,23 @@ export default function HomeScreen({ navigation }) {
   const { username } = config().initDataUnsafe.user;
   const userInfo = { name: username };
   const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const openGallery = () => {
+          document.getElementById('fileInput').click();
+  };
+
+    const handleFileChange = async (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const imageUri = URL.createObjectURL(file);
+        try {
+          navigation.navigate('screens/FoodDetailsScreen', { userId: username, imageUri: imageUri });
+        } catch (error) {
+          console.error('Error processing meal image: ', error);
+        }
+      }
+    };
 
   useEffect(() => {
     const handleUser = async () => {
@@ -78,7 +96,7 @@ export default function HomeScreen({ navigation }) {
           {loading ? ( // Show loading indicator while data is fetching
                       <Text>Loading...</Text>
                     ) : (
-                      <CircularProgress currentValue={currentCalories} maxValue={caloriesBudget} /> // Adjust maxValue as needed
+                      <CircularProgress currentValue={currentCalories} maxValue={caloriesBudget} radius={90}/> // Adjust maxValue as needed
                     )
           }
           <View style={styles.statusContainer}>
@@ -103,21 +121,25 @@ export default function HomeScreen({ navigation }) {
 
         <ScrollView contentContainerStyle={styles.recentMealsSection}>
           <Text style={styles.sectionTitle}>Recent Meals</Text>
-          {recentMeals.length > 0 ? ( // Check if there are meals
+          {recentMeals.length > 0 ? (
             recentMeals.map(meal => (
-              <View key={meal.id} style={styles.mealItem}>
-                <Text style={styles.mealName}>{meal.dish_type + '/' + meal.short_description}</Text>
-                <Text style={styles.mealCalories}>{meal.calories} kcal</Text>
-              </View>
+              <MealCard key={meal.id} meal={meal} />
             ))
           ) : (
-            <Text>No meals recorded today.</Text> // Display message if no meals
+            <Text>No meals recorded today.</Text>
           )}
         </ScrollView>
-      </View>
 
-      <View>
-        <ImagePickerComponent user_id={username}/>
+        <TouchableOpacity style={styles.floatingButton} onPress={openGallery}>
+          <Text style={styles.buttonText}>+</Text>
+        </TouchableOpacity>
+        <input
+          type="file"
+          accept="image/*"
+          id="fileInput"
+          style={{ display: 'none' }}
+          onChange={handleFileChange}
+        />
       </View>
     </SafeAreaView>
   );
@@ -215,31 +237,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    paddingBottom: 32,
-  },
-  button: {
-    flex: 1,
+  floatingButton: {
+    position: 'absolute',
+    bottom: 32,
+    right: 32,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     backgroundColor: '#006A6A',
-    paddingVertical: 16,
-    borderRadius: 12,
-    marginHorizontal: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5, // For shadow effect on Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 }, // Shadow for iOS
+    shadowOpacity: 0.2, // Shadow for iOS
+    shadowRadius: 2, // Shadow for iOS
   },
   buttonText: {
     color: 'white',
-    textAlign: 'center',
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: '600',
-  },
-  secondaryButton: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#006A6A',
-  },
-  secondaryButtonText: {
-    color: '#006A6A',
   },
 });
