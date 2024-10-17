@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { addMeal } from '../service/MealDataService';
 
 const FoodDetailsScreen = ({ route }) => {
@@ -73,7 +73,7 @@ const FoodDetailsScreen = ({ route }) => {
       >
         <View style={styles.modalBackdrop}>
           <TouchableOpacity style={styles.modalCloseButton} onPress={() => { setModalVisible(false); navigation.navigate('HomeScreen'); }}>
-            <Ionicons name="close" size={30} color="black" />
+            <Icon name="close" size={30} color="black" />
           </TouchableOpacity>
 
           <View style={styles.imageFrame}>

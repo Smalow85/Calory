@@ -5,7 +5,7 @@ import WeeklyReportChart from '../components/WeekGraph';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { firestore } from '../config/FirebaseConfig';
 import { useRoute } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -153,17 +153,17 @@ const Statistics = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.headerRow}>
-          /*<TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Ionicons name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>*/
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
           <View style={styles.weekNavigator}>
-            /*<TouchableOpacity onPress={() => navigateWeek(-1)}>
-                <Ionicons name="chevron-back" size={24} color="black" />
-            </TouchableOpacity>*/
+            <TouchableOpacity onPress={() => navigateWeek(-1)}>
+                <Icon name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
             <Text style={styles.weekText}>{formatWeekRange(currentWeekStart)}</Text>
-            /*<TouchableOpacity onPress={() => navigateWeek(1)}>
-                <Ionicons name="chevron-forward" size={24} color="black" />
-            </TouchableOpacity>*/
+            <TouchableOpacity onPress={() => navigateWeek(1)}>
+                <Icon name="chevron-forward" size={24} color="black" />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.calorieCard}>
