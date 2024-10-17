@@ -74,6 +74,9 @@ importers:
       react-native-config:
         specifier: ^1.5.2
         version: 1.5.3
+      react-native-elements:
+        specifier: ^3.4.3
+        version: 3.4.3(react-native-safe-area-context@4.11.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0))(react-native-vector-icons@10.2.0)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0)
       react-native-gesture-handler:
         specifier: ^2.20.0
         version: 2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0)
@@ -1318,7 +1321,7 @@ packages:
 
   '@expo/bunyan@4.0.1':
     resolution: {integrity: sha512-+Lla7nYSiHZirgK+U/uYzsLv/X+HaJienbD5AKX1UQZHYfWaP+9uuQluRB4GrEVWF0GZ7vEVp/jzaOT9k/SQlg==}
-    engines: {node: '>=0.10.0'}
+    engines: {'0': node >=0.10.0}
 
   '@expo/cli@0.18.30':
     resolution: {integrity: sha512-V90TUJh9Ly8stYo8nwqIqNWCsYjE28GlVFWEhAFCUOp99foiQr8HSTpiiX5GIrprcPoWmlGoY+J5fQA29R4lFg==}
@@ -2308,6 +2311,12 @@ packages:
   '@types/react-dom@18.3.1':
     resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
+  '@types/react-native-vector-icons@6.4.18':
+    resolution: {integrity: sha512-YGlNWb+k5laTBHd7+uZowB9DpIK3SXUneZqAiKQaj1jnJCZM0x71GDim5JCTMi4IFkhc9m8H/Gm28T5BjyivUw==}
+
+  '@types/react-native@0.70.19':
+    resolution: {integrity: sha512-c6WbyCgWTBgKKMESj/8b4w+zWcZSsCforson7UdXtXMecG3MxCinYi6ihhrHVPyUrVzORsvEzK8zg32z4pK6Sg==}
+
   '@types/react-test-renderer@18.3.0':
     resolution: {integrity: sha512-HW4MuEYxfDbOHQsVlY/XtOvNHftCVEPhJF2pQXXwcUiUF+Oyb0usgp48HSgpK5rt8m9KZb22yqOeZm+rrVG8gw==}
 
@@ -2990,6 +2999,9 @@ packages:
 
   color-string@1.9.1:
     resolution: {integrity: sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg==}
+
+  color@3.2.1:
+    resolution: {integrity: sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==}
 
   color@4.2.3:
     resolution: {integrity: sha512-1rXeuUUiGGrykh+CeBdu5Ie7OJwinCgQY0bc7GCRxy5xVHy+moaqkpL/jqQq0MtQOeYcrqEz4abc5f0KtU7W4A==}
@@ -4715,6 +4727,9 @@ packages:
   lodash.isempty@4.4.0:
     resolution: {integrity: sha512-oKMuF3xEeqDltrGMfDxAPGIVMSSRv8tbRSODbrs4KGsRRLEhrW8N8Rd4DRgB2+621hY8A8XwwrTVhXWpxFvMzg==}
 
+  lodash.isequal@4.5.0:
+    resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
 
@@ -5170,6 +5185,10 @@ packages:
   openapi3-ts@4.2.2:
     resolution: {integrity: sha512-+9g4actZKeb3czfi9gVQ4Br2Ju3KwhCAQJBNaKgye5KggqcBLIhFHH+nIkcm0BUX00TrAJl6dH4JWgM4G4JWrw==}
 
+  opencollective-postinstall@2.0.3:
+    resolution: {integrity: sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==}
+    hasBin: true
+
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
     engines: {node: '>= 0.8.0'}
@@ -5496,6 +5515,12 @@ packages:
       react-native-windows:
         optional: true
 
+  react-native-elements@3.4.3:
+    resolution: {integrity: sha512-VtZc25EecPZyUBER85zFK9ZbY6kkUdcm1ZwJ9hdoGSCr1R/GFgxor4jngOcSYeMvQ+qimd5No44OVJW3rSJECA==}
+    peerDependencies:
+      react-native-safe-area-context: '>= 3.0.0'
+      react-native-vector-icons: '>7.0.0'
+
   react-native-gesture-handler@2.20.0:
     resolution: {integrity: sha512-rFKqgHRfxQ7uSAivk8vxCiW4SB3G0U7jnv7kZD4Y90K5kp6YrU8Q3tWhxe3Rx55BIvSd3mBe9ZWbWVJ0FsSHPA==}
     peerDependencies:
@@ -5514,6 +5539,12 @@ packages:
       react: '*'
       react-native: '>=0.71.0'
 
+  react-native-ratings@8.0.4:
+    resolution: {integrity: sha512-Xczu5lskIIRD6BEdz9A0jDRpEck/SFxRqiglkXi0u67yAtI1/pcJC76P4MukCbT8K4BPVl+42w83YqXBoBRl7A==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+
   react-native-reanimated@3.16.0:
     resolution: {integrity: sha512-DDyp5/sFeDTsb7lf/iYVwyRmbfzO/+vsUjGV4YHeI9RbelG9GpZRJoxyv5CN0PXsEjQiXk4XJ8rxYDopCg9bsg==}
     peerDependencies:
@@ -5531,6 +5562,11 @@ packages:
     resolution: {integrity: sha512-8ri3Pd9QcpfXnVckOe/Lnto+BXmSPHV/Q0RB0XW0gDKsCv5wi5k7ez7g1SzgiYHl29MSdiqgjH30zUyOOowOaw==}
     peerDependencies:
       react: '*'
+      react-native: '*'
+
+  react-native-size-matters@0.3.1:
+    resolution: {integrity: sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==}
+    peerDependencies:
       react-native: '*'
 
   react-native-svg@15.8.0:
@@ -9377,7 +9413,9 @@ snapshots:
     transitivePeerDependencies:
       - '@babel/core'
       - '@babel/preset-env'
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   '@react-native/normalize-colors@0.74.85': {}
 
@@ -9795,6 +9833,15 @@ snapshots:
   '@types/prop-types@15.7.13': {}
 
   '@types/react-dom@18.3.1':
+    dependencies:
+      '@types/react': 18.3.11
+
+  '@types/react-native-vector-icons@6.4.18':
+    dependencies:
+      '@types/react': 18.3.11
+      '@types/react-native': 0.70.19
+
+  '@types/react-native@0.70.19':
     dependencies:
       '@types/react': 18.3.11
 
@@ -10631,6 +10678,11 @@ snapshots:
     dependencies:
       color-name: 1.1.4
       simple-swizzle: 0.2.2
+
+  color@3.2.1:
+    dependencies:
+      color-convert: 1.9.3
+      color-string: 1.9.1
 
   color@4.2.3:
     dependencies:
@@ -12707,6 +12759,8 @@ snapshots:
 
   lodash.isempty@4.4.0: {}
 
+  lodash.isequal@4.5.0: {}
+
   lodash.merge@4.6.2: {}
 
   lodash.omit@4.5.0: {}
@@ -13294,6 +13348,8 @@ snapshots:
     dependencies:
       yaml: 2.6.0
 
+  opencollective-postinstall@2.0.3: {}
+
   optionator@0.9.4:
     dependencies:
       deep-is: 0.1.4
@@ -13643,6 +13699,22 @@ snapshots:
 
   react-native-config@1.5.3: {}
 
+  react-native-elements@3.4.3(react-native-safe-area-context@4.11.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0))(react-native-vector-icons@10.2.0)(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0):
+    dependencies:
+      '@types/react-native-vector-icons': 6.4.18
+      color: 3.2.1
+      deepmerge: 4.3.1
+      hoist-non-react-statics: 3.3.2
+      lodash.isequal: 4.5.0
+      opencollective-postinstall: 2.0.3
+      react-native-ratings: 8.0.4(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0)
+      react-native-safe-area-context: 4.11.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0)
+      react-native-size-matters: 0.3.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))
+      react-native-vector-icons: 10.2.0
+    transitivePeerDependencies:
+      - react
+      - react-native
+
   react-native-gesture-handler@2.20.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0):
     dependencies:
       '@egjs/hammerjs': 2.0.17
@@ -13659,6 +13731,12 @@ snapshots:
 
   react-native-mmkv@2.12.2(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0):
     dependencies:
+      react: 18.2.0
+      react-native: 0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4)
+
+  react-native-ratings@8.0.4(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0):
+    dependencies:
+      lodash: 4.17.21
       react: 18.2.0
       react-native: 0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4)
 
@@ -13692,6 +13770,10 @@ snapshots:
       react-freeze: 1.0.4(react@18.2.0)
       react-native: 0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4)
       warn-once: 0.1.1
+
+  react-native-size-matters@0.3.1(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4)):
+    dependencies:
+      react-native: 0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4)
 
   react-native-svg@15.8.0(react-native@0.75.4(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8))(@types/react@18.3.11)(react@18.2.0)(typescript@5.0.4))(react@18.2.0):
     dependencies:
