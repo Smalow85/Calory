@@ -153,17 +153,17 @@ const Statistics = ({ navigation }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.contentContainer}>
         <View style={styles.headerRow}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+          /*<TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="black" />
-          </TouchableOpacity>
+          </TouchableOpacity>*/
           <View style={styles.weekNavigator}>
-            <TouchableOpacity onPress={() => navigateWeek(-1)}>
+            /*<TouchableOpacity onPress={() => navigateWeek(-1)}>
                 <Ionicons name="chevron-back" size={24} color="black" />
-            </TouchableOpacity>
+            </TouchableOpacity>*/
             <Text style={styles.weekText}>{formatWeekRange(currentWeekStart)}</Text>
-            <TouchableOpacity onPress={() => navigateWeek(1)}>
+            /*<TouchableOpacity onPress={() => navigateWeek(1)}>
                 <Ionicons name="chevron-forward" size={24} color="black" />
-            </TouchableOpacity>
+            </TouchableOpacity>*/
           </View>
         </View>
         <View style={styles.calorieCard}>

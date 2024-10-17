@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, Switch, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Icon library
 import { useRoute } from '@react-navigation/native';
 import { firestore } from '../config/FirebaseConfig';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
@@ -49,12 +48,12 @@ const Settings = ({ navigation, currentGoal }) => {
   return (
     <View style={styles.container}>
       {/* Row for Back Arrow and Header */}
-      <View style={styles.headerRow}>
+      /*<View style={styles.headerRow}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Settings</Text>
-      </View>
+      </View>*/
 
       {/* Example Switch Setting */}
       <View style={styles.settingItem}>
