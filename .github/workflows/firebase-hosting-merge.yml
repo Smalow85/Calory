@@ -25,4 +25,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CALORY_APP }}
           channelId: live
-          projectId: react-native-web-clicker
+          projectId: Calory
