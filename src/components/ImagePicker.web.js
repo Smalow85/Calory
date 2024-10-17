@@ -12,16 +12,12 @@ const ImagePickerComponent = (user_id) => {
         const file = event.target.files[0];
         if (file) {
             console.log('Selected file: ', file);
-            const mealData = {
-                      user_id: user_id.user_id, // Replace with actual user ID
-                      dish_type: "dinner",
-                      short_description: "Grilled Salmon with Asparagus",
-                      calories: 450, // Estimated calories
-                      ingredients: ["Salmon", "Asparagus", "Cherry Tomatoes", "Lemon"],
-                      proteins: 40, // Total protein in grams
-                      fats: 25, // Total fat in grams
-                      carbohydrates: 8 // Total carbs in grams
-                    };
+            try {
+                const mealData = await uploadImageAndParseResponse(file, userId);
+                console.log('Processed meal data:', mealData);
+              } catch (error) {
+                console.error('Error:', error);
+            }
             addMeal(mealData);
         }
   };

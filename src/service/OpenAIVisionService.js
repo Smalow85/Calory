@@ -14,7 +14,7 @@ export const analyzeMealImage = async (userId, imageUri) => {
       name: 'meal_image.jpg'
     });
 
-    const response = await axios.post('http://localhost:3000/api/analyze-meal', {
+    const response = await axios.post('http://localhost:8080/analyze', {
           userId,
           imageUri
     });

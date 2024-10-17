@@ -5,15 +5,16 @@ import { firestore } from '../config/FirebaseConfig';
 export async function addMeal(mealData) {
   try {
     const docRef = await addDoc(collection(firestore, "meals"), {
-      user_id: mealData.user_id,                    // ID of the user who is adding the meal
-      dish_type: mealData.dish_type,                // e.g., breakfast, lunch, dinner
-      short_description: mealData.short_description, // Short description of the meal
+      user_id: mealData.userId,                    // ID of the user who is adding the meal
+      dish_type: mealData.dishType,                // e.g., breakfast, lunch, dinner
+      short_description: mealData.shortDescription, // Short description of the meal
       calories: mealData.calories,                   // Total calories of the meal
       timestamp: serverTimestamp(),                 // Current timestamp
       ingredients: mealData.ingredients,             // List of ingredients
       proteins: mealData.proteins,                   // Protein content
       fats: mealData.fats,                           // Fat content
-      carbohydrates: mealData.carbohydrates          // Carbohydrate content
+      carbohydrates: mealData.carbohydrates,          // Carbohydrate content
+      base64image: mealData.base64image
     });
     console.log("Meal added with ID: ", docRef.id);
   } catch (e) {

@@ -2,12 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 
 const MealCard = ({ meal }) => {
+
+  const base64ImageUri = `data:image/jpg;base64,${meal.base64image}`; // Assuming meal.iconBase64 contains the base64 string
+
   return (
     <View style={styles.card}>
       {/* Food type icon */}
       <View style={styles.iconContainer}>
         <Image
-          source={{ uri: meal.iconUri }} // Assuming the meal object contains an icon URI
+          source={{ uri: base64ImageUri }} // Assuming the meal object contains an icon URI
           style={styles.icon}
         />
       </View>

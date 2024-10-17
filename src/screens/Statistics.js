@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, Dimensions, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, ActivityIndicator, Dimensions, StyleSheet, ScrollView, SafeAreaView, TouchableOpacity } from 'react-native';
 import NutrientsStats from '../components/NutrientsStats';
-import WeeklyReportChart from '../components/Graph';
+import WeeklyReportChart from '../components/WeekGraph';
 import { collection, query, where, getDocs, Timestamp } from 'firebase/firestore';
 import { firestore } from '../config/FirebaseConfig';
 import { useRoute } from '@react-navigation/native';
@@ -156,21 +156,19 @@ const Statistics = ({ navigation }) => {
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Statistics</Text>
-        </View>
-        <View style={styles.weekNavigator}>
-          <TouchableOpacity onPress={() => navigateWeek(-1)}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.weekText}>{formatWeekRange(currentWeekStart)}</Text>
-          <TouchableOpacity onPress={() => navigateWeek(1)}>
-            <Ionicons name="chevron-forward" size={24} color="black" />
-          </TouchableOpacity>
+          <View style={styles.weekNavigator}>
+            <TouchableOpacity onPress={() => navigateWeek(-1)}>
+                <Ionicons name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.weekText}>{formatWeekRange(currentWeekStart)}</Text>
+            <TouchableOpacity onPress={() => navigateWeek(1)}>
+                <Ionicons name="chevron-forward" size={24} color="black" />
+            </TouchableOpacity>
+          </View>
         </View>
         <View style={styles.calorieCard}>
           <WeeklyReportChart style={styles.graph} data={weeklyData} onBarClick={handleBarClick} selectedDay={selectedDay} />
         </View>
-
         <NutrientsStats fats={fats} proteins={proteins} carbohydrates={carbohydrates} />
       </View>
     </SafeAreaView>
@@ -204,13 +202,15 @@ const styles = StyleSheet.create({
   },
   weekNavigator: {
     flexDirection: 'row',
+    flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15,
+    marginLeft: 16, // Add some space between the header text and week navigator
   },
   weekText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#000',
   },
   calorieCard: {
     backgroundColor: '#ddd',
