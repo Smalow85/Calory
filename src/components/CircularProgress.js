@@ -1,40 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
-import Animated, {
-  useSharedValue,
-  useAnimatedProps,
-  withTiming,
-  Easing,
-} from 'react-native-reanimated';
-import { PROGRESS_RING_COLOR } from '../screens/Constants'
+import { PROGRESS_RING_COLOR } from '../screens/Constants';
 
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const { width } = Dimensions.get('window');
 
-export default function CircularProgress ({ currentValue, maxValue, radius }) {
+export default function CircularProgress({ currentValue, maxValue, radius }) {
   const strokeWidth = 15;
   const circumference = 2 * Math.PI * radius;
-  const progress = useSharedValue(0);
 
+  // Use state for animated progress
+  const [progress, setProgress] = useState(0);
   const percentage = Math.min((currentValue / maxValue) * 100, 100);
 
   const strokeColor = currentValue >= maxValue ? '#FF0000' : PROGRESS_RING_COLOR; // Red if over, green otherwise
 
   useEffect(() => {
-    'worklet';
-    progress.value = withTiming(percentage, {
-      duration: 1000,
-      easing: Easing.out(Easing.exp),
-    });
-  }, [currentValue]);
-
-  const animatedProps = useAnimatedProps(() => {
-    'worklet';
-    return {
-      strokeDashoffset: circumference - (progress.value / 100) * circumference,
+    let animationFrame;
+    const animateProgress = () => {
+      if (progress < percentage) {
+        setProgress((prev) => Math.min(prev + 1, percentage)); // Animate incrementally
+        animationFrame = requestAnimationFrame(animateProgress);
+      }
     };
-  });
+    animateProgress();
+
+    return () => cancelAnimationFrame(animationFrame); // Cleanup animation on unmount
+  }, [percentage]);
+
+  const strokeDashoffset = circumference - (progress / 100) * circumference;
 
   return (
     <View style={styles.container}>
@@ -48,9 +42,8 @@ export default function CircularProgress ({ currentValue, maxValue, radius }) {
           r={radius}
           strokeWidth={strokeWidth}
         />
-        {/* Foreground Animated Circle */}
-        <AnimatedCircle
-          animatedProps={animatedProps}
+        {/* Foreground Circle */}
+        <Circle
           stroke={strokeColor}
           fill="none"
           cx="100"
@@ -59,8 +52,8 @@ export default function CircularProgress ({ currentValue, maxValue, radius }) {
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={circumference}
-          strokeDashoffset={circumference}
-          transform={`rotate(-90 100 100)`}
+          strokeDashoffset={strokeDashoffset}
+          transform={`rotate(-90 100 100)`} // Rotate for progress to start at top
         />
       </Svg>
       <View style={styles.textContainer}>
@@ -69,7 +62,7 @@ export default function CircularProgress ({ currentValue, maxValue, radius }) {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
