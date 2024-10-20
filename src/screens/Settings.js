@@ -4,7 +4,7 @@ import { useRoute } from '@react-navigation/native';
 import { firestore } from '../config/FirebaseConfig';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { BASE_COLOR } from './Constants';
-import Icon from 'react-native-vector-icons/Ionicons';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Settings = ({ navigation, currentGoal }) => {
   const [isEnabled, setIsEnabled] = useState(false);
@@ -51,7 +51,7 @@ const Settings = ({ navigation, currentGoal }) => {
       {/* Row for Back Arrow and Header */}
       <View style={styles.headerRow}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Icon name="ios-book" size={24} color="black" />
+          <AntDesign name="back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>Settings</Text>
       </View>
