@@ -22,6 +22,7 @@ export default function CircularProgress ({ currentValue, maxValue, radius }) {
   const strokeColor = currentValue >= maxValue ? '#FF0000' : PROGRESS_RING_COLOR; // Red if over, green otherwise
 
   useEffect(() => {
+    'worklet';
     progress.value = withTiming(percentage, {
       duration: 1000,
       easing: Easing.out(Easing.exp),
