@@ -40,7 +40,7 @@ const FoodDetailsScreen = ({ route }) => {
         });
       }
 
-      const response = await fetch('http://localhost:8080/api/analyze-meal', {
+      const response = await fetch('http://localhost:8080/api/gemini/analyze-meal', {
         method: 'POST',
         body: formData,
       });

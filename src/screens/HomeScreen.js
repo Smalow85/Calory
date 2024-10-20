@@ -44,51 +44,6 @@ export default function HomeScreen({ navigation }) {
       }
     };
 
-  const sendImage = async () => {
-        if (!imageUri) {
-          setError('No image selected');
-          return;
-        }
-
-        setLoading(true);
-        setError(null);
-        setSuccessMessage('');
-
-        try {
-          const formData = new FormData();
-          formData.append('userId', userId); // Append user ID
-
-          // Create a file object for the selected image
-          const file = {
-            uri: imageUri,
-            name: 'meal_image.jpg', // Name of the file
-            type: 'image/jpeg', // MIME type
-          };
-
-          formData.append('image', file); // Append the image file to FormData
-
-          // Send POST request to the API
-          const response = await fetch('http://localhost:8080/analyze', {
-            method: 'POST',
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error('Failed to send meal data');
-          }
-
-          const data = await response.json();
-          setSuccessMessage('Meal data sent successfully!');
-          console.log('Response from server:', data);
-        } catch (err) {
-          setError(err.message);
-          console.error('Error sending meal data:', err);
-        } finally {
-          setLoading(false);
-          setModalVisible(false); // Close modal after sending
-        }
-  };
-
   useEffect(() => {
     const handleUser = async () => {
       try {

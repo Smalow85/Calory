@@ -1,10 +1,5 @@
 import axios from 'axios';
 
-//const OPENAI_VISION_API_URL = 'https://api.openai.com/v1/vision';
-const OPENAI_VISION_API_URL = 'https://cors-anywhere.herokuapp.com/https://api.openai.com/v1/vision';
-
-const OPENAI_API_KEY = 'demo'; // Replace with your OpenAI API Key
-
 export const analyzeMealImage = async (userId, imageUri) => {
   try {
     const formData = new FormData();
@@ -21,7 +16,6 @@ export const analyzeMealImage = async (userId, imageUri) => {
 
     const mealData = response.data; // Parse the API response to get meal data
 
-    // Format the mealData based on the structure you want
     const formattedMealData = {
       user_id: userId,
       dish_type: mealData.dish_type,
