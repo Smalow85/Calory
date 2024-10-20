@@ -1,50 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Switch, TouchableOpacity, TextInput, StyleSheet, Alert } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { firestore } from '../config/FirebaseConfig';
 import { doc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { BASE_COLOR } from './Constants';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Card from '../components/NutrientsCard'; // Import the MacroCard component
 
-const Settings = ({ navigation, currentGoal }) => {
-  const [isEnabled, setIsEnabled] = useState(false);
-  const [caloriesBudget, setCaloriesBudget] = useState(currentGoal); // State for calorie budget
+const Settings = ({ navigation }) => {
   const route = useRoute(); // Hook to access route parameters
-  const { userId } = route.params; // Extract userId from route params
+  const { userId, caloriesBudget } = route.params;
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [inputValue, setInputValue] = useState(caloriesBudget || 2000); // Separate input value state
+  const [macros, setMacros] = useState({ carbs: 0, fats: 0, proteins: 0 }); // State to hold macro values
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const handleSaveCalories = async () => {
-      try {
-        // Reference to the 'users' collection
-        const usersCollection = collection(firestore, 'users');
-
-        // Query to find the document where 'name' field equals the userId
-        const userQuery = query(usersCollection, where('name', '==', userId));
-
-        // Execute the query
-        const querySnapshot = await getDocs(userQuery);
-
-        if (!querySnapshot.empty) {
-          // Assuming there's only one document matching the query
-          const userDoc = querySnapshot.docs[0];
-          const userDocRef = userDoc.ref;
-
-          // Update the caloriesBudget field in the user's document
-          await updateDoc(userDocRef, {
-            caloriesBudget: caloriesBudget,
-          });
-
-          Alert.alert('Success', `Calories budget of ${caloriesBudget} saved!`);
-          navigation.navigate('HomeScreen')
-        } else {
-          Alert.alert('Error', 'User not found');
-        }
-      } catch (error) {
-        console.error('Error saving calories budget: ', error);
-        Alert.alert('Error', 'Failed to save calories budget. Please try again.');
-      }
+  const calculateMacros = (calories) => {
+    const carbs = (calories * 0.50) / 4; // Carbs have 4 calories per gram
+    const fats = (calories * 0.30) / 9; // Fats have 9 calories per gram
+    const proteins = (calories * 0.20) / 4; // Proteins have 4 calories per gram
+    setMacros({ carbs: Math.round(carbs), fats: Math.round(fats), proteins: Math.round(proteins) });
   };
+
+  const handleSaveCalories = async () => {
+    try {
+      // Reference to the 'users' collection
+      const usersCollection = collection(firestore, 'users');
+
+      // Query to find the document where 'name' field equals the userId
+      const userQuery = query(usersCollection, where('name', '==', userId));
+
+      // Execute the query
+      const querySnapshot = await getDocs(userQuery);
+
+      if (!querySnapshot.empty) {
+        // Assuming there's only one document matching the query
+        const userDoc = querySnapshot.docs[0];
+        const userDocRef = userDoc.ref;
+
+        // Update the caloriesBudget field in the user's document
+        await updateDoc(userDocRef, {
+          caloriesBudget: parseInt(inputValue, 10) || 0, // Update using inputValue
+        });
+
+        Alert.alert('Success', `Calories budget of ${inputValue} saved!`);
+        navigation.navigate('HomeScreen');
+      } else {
+        Alert.alert('Error', 'User not found');
+      }
+    } catch (error) {
+      console.error('Error saving calories budget: ', error);
+      Alert.alert('Error', 'Failed to save calories budget. Please try again.');
+    }
+  };
+
+  const handleFocus = () => {
+    setInputValue(''); // Clear input on focus
+  };
+
+
+
+  useEffect(() => {
+    calculateMacros(inputValue);
+  }, [inputValue]);
 
   return (
     <View style={styles.container}>
@@ -72,12 +91,20 @@ const Settings = ({ navigation, currentGoal }) => {
         <Text style={styles.settingText}>Calories Budget</Text>
         <TextInput
           style={styles.input}
-          placeholder={currentGoal}
+          placeholder={`Currently ${caloriesBudget}`} // Show current value in placeholder
+          placeholderTextColor="#A9A9A9" // Gray color for the placeholder
           keyboardType="numeric"
-          value={caloriesBudget}
-          onChangeText={setCaloriesBudget}
+          onChangeText={text => setInputValue(text)} // Update inputValue directly
+          onFocus={handleFocus} // Clear input on focus
         />
       </View>
+
+      {/* Recommended Macronutrients in Card */}
+      <Card title="Recommended Macronutrients">
+        <Text style={styles.macroDetail}>Carbohydrates: {macros.carbs}g</Text>
+        <Text style={styles.macroDetail}>Fats: {macros.fats}g</Text>
+        <Text style={styles.macroDetail}>Proteins: {macros.proteins}g</Text>
+      </Card>
 
       {/* Save Button */}
       <TouchableOpacity style={styles.saveButton} onPress={handleSaveCalories}>
@@ -126,6 +153,9 @@ const styles = StyleSheet.create({
     width: '50%',
     textAlign: 'right',
   },
+  macroDetail: {
+    fontSize: 16,
+  },
   saveButton: {
     backgroundColor: BASE_COLOR,
     paddingVertical: 15,
@@ -134,17 +164,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   saveText: {
-    color: '#fff',
-    fontSize: 16,
-  },
-  logoutButton: {
-    marginTop: 30,
-    backgroundColor: '#ff4d4d',
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  logoutText: {
     color: '#fff',
     fontSize: 16,
   },

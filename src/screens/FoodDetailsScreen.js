@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { addMeal } from '../service/MealDataService';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const FoodDetailsScreen = ({ route }) => {
   const { userId, imageUri } = route.params;
@@ -73,7 +73,7 @@ const FoodDetailsScreen = ({ route }) => {
       >
         <View style={styles.modalBackdrop}>
           <TouchableOpacity style={styles.modalCloseButton} onPress={() => { setModalVisible(false); navigation.navigate('HomeScreen'); }}>
-            <Icon name="close" size={30} color="black" />
+            <AntDesign name="close" size={30} color="black" />
           </TouchableOpacity>
 
           <View style={styles.imageFrame}>

@@ -1,4 +1,4 @@
-import { collection, addDoc, serverTimestamp, query, where, getDocs, Timestamp, onSnapshot  } from "firebase/firestore";
+import { collection, addDoc, doc, deleteDoc, serverTimestamp, query, where, getDocs, Timestamp, onSnapshot  } from "firebase/firestore";
 import { firestore } from '../config/FirebaseConfig';
 
 // Function to add a meal to Firestore
@@ -123,4 +123,18 @@ export function groupMealsByDay(meals) {
   console.log(caloriesByDay)
 
   return caloriesByDay;
+}
+
+export async function deleteMeal(mealId) {
+  try {
+  console.log(mealId)
+    // Create a reference to the meal document using the mealId
+    const mealRef = doc(firestore, "meals", mealId);
+
+    // Delete the meal document
+    await deleteDoc(mealRef);
+    console.log("Meal deleted with ID: ", mealId);
+  } catch (e) {
+    console.error("Error deleting meal: ", e);
+  }
 }

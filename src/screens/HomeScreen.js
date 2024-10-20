@@ -84,7 +84,7 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity>
             <Text
                 style={styles.menuIcon}
-                onPress={() => navigation.navigate('screens/Settings', { userId: username })}
+                onPress={() => navigation.navigate('screens/Settings', { userId: username, caloriesBudget: caloriesBudget })}
             >☰</Text>
           </TouchableOpacity>
           <Text style={styles.greeting}>Hello, {username}</Text>

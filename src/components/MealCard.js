@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons'; // Adjust this import based on your icon library
+import { deleteMeal } from '../service/MealDataService'
+
 
 const MealCard = ({ meal }) => {
-
   const base64ImageUri = `data:image/jpg;base64,${meal.base64image}`; // Assuming meal.iconBase64 contains the base64 string
 
   return (
@@ -21,6 +23,11 @@ const MealCard = ({ meal }) => {
         <Text style={styles.mealDescription}>{meal.short_description}</Text>
         <Text style={styles.mealCalories}>{meal.calories} kcal</Text>
       </View>
+
+      {/* Delete button */}
+      <TouchableOpacity onPress={() => deleteMeal(meal.id)} style={styles.deleteButton}>
+        <FontAwesome name="trash" size={24} color="#FF4D4F" /> {/* Bucket icon */}
+      </TouchableOpacity>
     </View>
   );
 };
@@ -68,6 +75,11 @@ const styles = StyleSheet.create({
   mealCalories: {
     fontSize: 14,
     color: '#888',
+  },
+  deleteButton: {
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
