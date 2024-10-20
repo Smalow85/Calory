@@ -40,7 +40,7 @@ const FoodDetailsScreen = ({ route }) => {
         });
       }
 
-      const response = await fetch('https://b033-95-5-97-167.ngrok-free.app/api/gemini/analyze-meal', {
+      const response = await fetch('http://34.57.74.111:8080/api/gemini/analyze-meal', {
         method: 'POST',
         body: formData,
       });
