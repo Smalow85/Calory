@@ -29,6 +29,7 @@ export default function CircularProgress ({ currentValue, maxValue, radius }) {
   }, [currentValue]);
 
   const animatedProps = useAnimatedProps(() => {
+    'worklet';
     return {
       strokeDashoffset: circumference - (progress.value / 100) * circumference,
     };
