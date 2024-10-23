@@ -3,6 +3,8 @@ import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, 
 import { useNavigation } from '@react-navigation/native';
 import { addMeal } from '../service/MealDataService';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import axios from 'axios';
+import https from 'https';
 
 const FoodDetailsScreen = ({ route }) => {
   const { userId, imageUri } = route.params;
@@ -40,10 +42,23 @@ const FoodDetailsScreen = ({ route }) => {
         });
       }
 
-      const response = await fetch('http://34.57.74.111:8080/api/gemini/analyze-meal', {
-        method: 'POST',
-        body: formData,
+      const serverUrl = 'https://34.57.74.111:443/api/gemini/analyze-meal';
+      console.log(serverUrl)
+
+      const httpsAgent = new https.Agent({
+        rejectUnauthorized: false, // Bypass certificate validation (not recommended for production)
       });
+
+      const fetchMealData = async (formData) => {
+        try {
+          const response = await axios.post('http://10.128.0.2:8080/api/analyze-meal', formData, {
+            httpsAgent,
+          });
+          console.log('Response:', response.data);
+        } catch (error) {
+          console.error('Error sending meal data:', error);
+        }
+      };
 
       if (!response.ok) {
         const errorData = await response.json();
